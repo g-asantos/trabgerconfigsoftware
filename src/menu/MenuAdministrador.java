@@ -11,5 +11,8 @@ public class MenuAdministrador extends Menu {
         System.out.println("1 - opção qualquer do administrador");
     }
 
+    @Override
+    void escolhaMenu(String input) {
+        System.out.println("Menu ADMIN - Usuário escolheu opção " + input);
     }
 }

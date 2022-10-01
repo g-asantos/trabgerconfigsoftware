@@ -40,10 +40,21 @@ public abstract class Menu {
         System.out.println("---");
         System.out.println("0 - trocar usuário");
         this.showSubMenu();
+        System.out.println("99 - sair");
+        String respostaUsuario = this.teclado.next();
+        if (respostaUsuario.equals("0")) {
+            this.trocarUsuario();
+            return;
+        }
+
+        if (respostaUsuario.equals("99")) return;
+        else this.escolhaMenu(respostaUsuario);
+        this.show();
     }
 
     protected abstract void showSubMenu();
 
+    abstract void escolhaMenu(String input);
 
     public void trocarUsuario() {
         // List<Usuario> usuarios = usuarioRepository.listar();

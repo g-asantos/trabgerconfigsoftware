@@ -10,5 +10,8 @@ public class MenuMedico extends Menu {
         System.out.println("1 - opção qualquer do médico");
     }
 
+    @Override
+    void escolhaMenu(String input) {
+        System.out.println("Menu MEDICO - Usuário escolheu opção " + input);
     }
 }
