@@ -13,4 +13,8 @@
 *.iml
 *.idea
 
+
 out/
+
+testAutRep.java
+
