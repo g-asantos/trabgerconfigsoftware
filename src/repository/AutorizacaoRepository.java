@@ -1,4 +1,4 @@
-package repositorio;
+package repository;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;  
@@ -9,7 +9,7 @@ import dominio.Usuario;
 
 public class AutorizacaoRepository {
     private static AutorizacaoRepository instance;
-    private static Integer id;
+    private static int id;
     private ArrayList<AutorizacaoExame> lista;
     /**
      * Método estático que permite a aplicação do padrão Singleton.
@@ -33,7 +33,7 @@ public class AutorizacaoRepository {
      */
     public AutorizacaoExame criar(Usuario paciente, Exame exame, Usuario medico){
         id++;
-        LocalDateTime currentTime = java.time.LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
         AutorizacaoExame autExame = new AutorizacaoExame(id, currentTime, 
                                                          medico, paciente, exame);
         lista.add(autExame);
@@ -76,7 +76,7 @@ public class AutorizacaoRepository {
     }
 
     /**
-     * Método que retorna a lista de autorizações de exame para um médico específico. 
+     * Método que retorna a lista de autorizações de exame para um paciente específico. 
      */
     public ArrayList<AutorizacaoExame> listarPorPaciente(Usuario paciente){
         Integer idPaciente = paciente.getId();
@@ -89,5 +89,20 @@ public class AutorizacaoRepository {
             }
         }
         return listaPaciente;
+    }
+    /**
+     * Método que retorna a lista de autorizações de exame para um exame específico. 
+     */
+    public ArrayList<AutorizacaoExame> listarPorExame(Exame exame){
+        Integer idExame = exame.getCodigo();
+        ArrayList<AutorizacaoExame> listaExame = new ArrayList<>();
+        Integer idLista;
+        for (AutorizacaoExame autorizacaoExame : lista) {
+            idLista = autorizacaoExame.getExame().getCodigo();
+            if(idLista==idExame){
+                listaExame.add(autorizacaoExame);
+            }
+        }
+        return listaExame;
     }
 }
