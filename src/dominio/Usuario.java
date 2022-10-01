@@ -1,5 +1,8 @@
 package dominio;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class Usuario {
     int id;
     String nome;
@@ -22,5 +25,11 @@ public class Usuario {
 
     public TipoUsuario getTipo() {
         return tipo;
+    }
+
+    public String getIniciais() {
+        return Arrays.stream(this.nome.split(" "))
+                .map(str -> String.valueOf(str.charAt(0)))
+                .collect(Collectors.joining());
     }
 }
