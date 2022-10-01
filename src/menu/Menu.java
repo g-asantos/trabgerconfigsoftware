@@ -6,9 +6,9 @@ import dominio.Usuario;
 import java.util.Scanner;
 
 public abstract class Menu {
-    // SeletorUsuario seletorUsuario
-    // Sessao sessao
-    // UsuarioRepository usuarioRepository
+    // protected SeletorUsuario seletorUsuario
+    // protected Sessao sessao
+    // protected UsuarioRepository usuarioRepository
     protected Menu menuMedico;
     protected Menu menuPaciente;
     protected Menu menuAdministrador;
@@ -42,7 +42,8 @@ public abstract class Menu {
         this.showSubMenu();
     }
 
-    abstract void showSubMenu();
+    protected abstract void showSubMenu();
+
 
     public void trocarUsuario() {
         // List<Usuario> usuarios = usuarioRepository.listar();

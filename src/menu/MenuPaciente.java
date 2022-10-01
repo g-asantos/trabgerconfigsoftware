@@ -6,17 +6,9 @@ public class MenuPaciente extends Menu {
     }
 
     @Override
-    void showSubMenu() {
-        System.out.println("------ PACIENTE ------");
-        String input = this.teclado.next();
-
-        switch (input) {
-            case "0":
-                this.trocarUsuario();
-                break;
-            default:
-                this.show();
-        }
+    protected void showSubMenu() {
+        System.out.println("1 - opção qualquer do paciente");
+    }
 
     }
 }
