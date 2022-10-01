@@ -59,5 +59,19 @@ public class AutorizacaoRepository {
         }
         return listRealizados;
     }
-
+    /**
+     * Método que retorna a lista de autorizações de exame para um médico específico. 
+     */
+    public ArrayList<AutorizacaoExame> listarPorMedico(Usuario medico){
+        Integer idMedico = medico.getId();
+        ArrayList<AutorizacaoExame> listaMedico = new ArrayList<>();
+        Integer idLista;
+        for (AutorizacaoExame autorizacaoExame : lista) {
+            idLista = autorizacaoExame.getMedicoSolicitante().getId();
+            if(idLista==idMedico){
+                listaMedico.add(autorizacaoExame);
+            }
+        }
+        return listaMedico;
+    }
 }
