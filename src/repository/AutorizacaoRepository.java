@@ -32,9 +32,8 @@ public class AutorizacaoRepository {
      * de exame.
      */
     public AutorizacaoExame criar(Usuario paciente, Exame exame, Usuario medico){
-        id++;
         LocalDateTime currentTime = LocalDateTime.now();
-        AutorizacaoExame autExame = new AutorizacaoExame(id, currentTime, 
+        AutorizacaoExame autExame = new AutorizacaoExame(id++, currentTime, 
                                                          medico, paciente, exame);
         lista.add(autExame);
         return autExame;    
