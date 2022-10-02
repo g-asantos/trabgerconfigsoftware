@@ -16,5 +16,11 @@ public class Sessao {
 
     private Sessao() {}
 
-    
+    public Usuario getUsuarioLogado(){
+        return usuarioLogado;
+    }
+
+    public void setUsuarioLogado(Usuario usuarioLogado){
+        this.usuarioLogado = usuarioLogado;
+    }
 }
