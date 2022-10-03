@@ -1,4 +1,4 @@
-/*teste*/
+/*testes*/
 
 package repository;
 
@@ -7,23 +7,30 @@ import dominio.TipoUsuario;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class UsuarioRepository {
-    private List<Usuario> listaUsuarios = new ArrayList<>();
+    private static UsuarioRepository instance;
+    private ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+    private static int id;
+    public static UsuarioRepository getInstance(){
+        if(instance == null){
+            instance = new UsuarioRepository();
+        }
+        return instance;
+    }
 
-    public Usuario Criar(int id, String nome, TipoUsuario tipoUsuario) {
-        Usuario usuario = new Usuario(id, nome, tipoUsuario);
+    public Usuario Criar(String nome, TipoUsuario tipoUsuario) {
+        Usuario usuario = new Usuario(proxId(), nome, tipoUsuario);
         listaUsuarios.add(usuario);
         return usuario;
     }
 
-    public List<Usuario> listar() {
+    public ArrayList<Usuario> listar() {
 
         return listaUsuarios;
     }
 
-    public List<Usuario> listarPorTipo(TipoUsuario tipoUsuario) {
-        List<Usuario> listaTipo = new ArrayList<>();
+    public ArrayList<Usuario > listarPorTipo(TipoUsuario tipoUsuario) {
+        ArrayList<Usuario > listaTipo = new ArrayList<>();
 
         for (Usuario usuario : listaUsuarios) {
             if (usuario.getTipo() == tipoUsuario) {
@@ -33,8 +40,8 @@ public class UsuarioRepository {
         return listaTipo;
     }
 
-    public List<Usuario> listarMedicoOuPacientePorNome(String nome) {
-        List<Usuario> listaNome = new ArrayList<>();
+    public ArrayList<Usuario > listarMedicoOuPacientePorNome(String nome) {
+        ArrayList<Usuario > listaNome = new ArrayList<>();
 
         for (Usuario usuario : listaUsuarios) {
             if (usuario.getNome() == nome && usuario.getTipo() == TipoUsuario.PACIENTE || usuario.getTipo() == TipoUsuario.MEDICO) {
@@ -42,5 +49,14 @@ public class UsuarioRepository {
             }
         }
         return listaNome;
+    }
+    public int proxId(){
+        try {
+            int id = listaUsuarios.get(listaUsuarios.size() - 1).getId();
+        }
+        catch (IndexOutOfBoundsException e){
+            int id = 1;
+        }
+        return id;
     }
 }
