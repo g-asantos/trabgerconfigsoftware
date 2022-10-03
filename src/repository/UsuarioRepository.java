@@ -1,5 +1,3 @@
-/*testes*/
-
 package repository;
 
 import dominio.Usuario;
