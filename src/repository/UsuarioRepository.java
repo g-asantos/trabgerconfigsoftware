@@ -16,8 +16,8 @@ public class UsuarioRepository {
         return instance;
     }
 
-    public Usuario Criar(String nome, TipoUsuario tipoUsuario) {
-        Usuario usuario = new Usuario(proxId(), nome, tipoUsuario);
+    public Usuario criar(String nome, TipoUsuario tipoUsuario) {
+        Usuario usuario = new Usuario(UsuarioRepository.id++, nome, tipoUsuario);
         listaUsuarios.add(usuario);
         return usuario;
     }
@@ -42,19 +42,10 @@ public class UsuarioRepository {
         ArrayList<Usuario > listaNome = new ArrayList<>();
 
         for (Usuario usuario : listaUsuarios) {
-            if (usuario.getNome() == nome && usuario.getTipo() == TipoUsuario.PACIENTE || usuario.getTipo() == TipoUsuario.MEDICO) {
+            if (usuario.getNome().contains(nome) && usuario.getTipo() == TipoUsuario.PACIENTE || usuario.getTipo() == TipoUsuario.MEDICO) {
                 listaNome.add(usuario);
             }
         }
         return listaNome;
-    }
-    public int proxId(){
-        try {
-            int id = listaUsuarios.get(listaUsuarios.size() - 1).getId();
-        }
-        catch (IndexOutOfBoundsException e){
-            int id = 1;
-        }
-        return id;
     }
 }
