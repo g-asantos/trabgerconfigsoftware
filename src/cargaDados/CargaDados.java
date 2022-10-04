@@ -14,9 +14,9 @@ public class CargaDados{
 }
 
     public void carregar(){
-        usuarioRepository.criar("Jonas",TipoUsuario.ADMIN);
-        usuarioRepository.criar("Matheus", TipoUsuario.MEDICO);
-        usuarioRepository.criar("Thiago", TipoUsuario.PACIENTE);
+        usuarioRepository.criar("Jonas Souza",TipoUsuario.ADMIN);
+        usuarioRepository.criar("Matheus Oliveira", TipoUsuario.MEDICO);
+        usuarioRepository.criar("Thiago Santos", TipoUsuario.PACIENTE);
 
         exameRepository.criar("ELETROCARDIOGRAMA");
         exameRepository.criar("TESTE ERGOMÉTRICO");

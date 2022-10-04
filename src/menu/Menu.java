@@ -2,13 +2,17 @@ package menu;
 
 import dominio.TipoUsuario;
 import dominio.Usuario;
+import repository.UsuarioRepository;
+import seletor.SeletorUsuario;
+import sessao.Sessao;
 
+import java.util.List;
 import java.util.Scanner;
 
 public abstract class Menu {
-    // protected SeletorUsuario seletorUsuario
-    // protected Sessao sessao
-    // protected UsuarioRepository usuarioRepository
+    protected SeletorUsuario seletorUsuario;
+    protected Sessao sessao;
+    protected UsuarioRepository usuarioRepository;
     protected Menu menuMedico;
     protected Menu menuPaciente;
     protected Menu menuAdministrador;
@@ -16,8 +20,9 @@ public abstract class Menu {
 
     public Menu() {
         this.teclado = new Scanner(System.in);
-        // this.sessao = Sessao.getInstance();
-        // this.usuarioRepository = UsuarioRepository.getInstance();
+        this.sessao = Sessao.getInstance();
+        this.usuarioRepository = UsuarioRepository.getInstance();
+        this.seletorUsuario = new SeletorUsuario();
     }
 
     public void setMenuMedico(Menu menuMedico) {
@@ -33,8 +38,7 @@ public abstract class Menu {
     }
 
     public void show() {
-        // Usuario usuarioLogado = this.sessao.getUsuarioLogado();
-        Usuario usuarioLogado = new Usuario(1, "Alexia Dorneles", TipoUsuario.PACIENTE);
+        Usuario usuarioLogado = this.sessao.getUsuarioLogado();
         System.out.println();
         System.out.println(">> logado como " + usuarioLogado.getIniciais() + " - " + usuarioLogado.getTipo().getNome());
         System.out.println("---");
@@ -57,10 +61,9 @@ public abstract class Menu {
     abstract void escolhaMenu(String input);
 
     public void trocarUsuario() {
-        // List<Usuario> usuarios = usuarioRepository.listar();
-        // Usuario selecionado = seletorUsuario.selecionar(usuarios);
-        Usuario selecionado = new Usuario(1, "Alexia", TipoUsuario.PACIENTE);
-        // sessao.setUsuarioLogado(usuario)
+        List<Usuario> usuarios = usuarioRepository.listar();
+        Usuario selecionado = seletorUsuario.selecionar(usuarios);
+        sessao.setUsuarioLogado(selecionado);
         if (selecionado.getTipo() == TipoUsuario.ADMIN) menuAdministrador.show();
         else if (selecionado.getTipo() == TipoUsuario.MEDICO) menuMedico.show();
         else if (selecionado.getTipo() == TipoUsuario.PACIENTE) menuPaciente.show();
