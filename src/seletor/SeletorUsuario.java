@@ -19,6 +19,7 @@ public class SeletorUsuario {
             int idSelecionado = this.mostrarOpcoes(lista);
             selecionado = lista.stream().filter((usuario) -> usuario.getId() == idSelecionado)
                     .findFirst().orElse(null);
+            if (selecionado == null) System.out.println("Código inválido, tente novamnente");
         }
 
         return selecionado;
@@ -32,7 +33,6 @@ public class SeletorUsuario {
                         " - " + usuario.getNome() + " - " +
                         usuario.getTipo().getNome()));
                 return this.num.nextInt();
-
             } catch (InputMismatchException ex) {
                 System.out.println("Ops...parece que voce digitou um valor invalido.");
                 num.nextLine();
