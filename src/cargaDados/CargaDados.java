@@ -7,6 +7,11 @@ import repository.UsuarioRepository;
 public class CargaDados{
     private UsuarioRepository usuarioRepository;
     private ExameRepository exameRepository;
+    
+    public CargaDados(UsuarioRepository usuarioRepository, ExameRepository exameRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.exameRepository = exameRepository;
+}
 
     public void carregar(){
         usuarioRepository.criar("Jonas",TipoUsuario.ADMIN);
