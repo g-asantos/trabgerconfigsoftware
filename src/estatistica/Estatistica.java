@@ -17,4 +17,16 @@ public class Estatistica {
     public int numeroPacientes() {
         return usuarioRepository.listarPorTipo(TipoUsuario.PACIENTE).size();
     }
+
+    /* Retorna o numero de autorizacoes */
+    public int numeroAutorizacoes() {
+        return autorizacaoRepository.listar().size();
+    }
+
+    /* Retorna o percentual de realizados */
+    public int percentualRealizados() {
+        int totalAutorizados = autorizacaoRepository.listar().size();
+        int totalRealizados = autorizacaoRepository.listarRealizados().size();
+        return (totalRealizados / totalAutorizados) * 100;
+    }
 }
