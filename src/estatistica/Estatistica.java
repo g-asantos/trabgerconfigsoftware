@@ -8,13 +8,6 @@ public class Estatistica {
     private UsuarioRepository usuarioRepository;
     private AutorizacaoRepository autorizacaoRepository;
     private static Estatistica instance;
-    
-    public static Estatistica getInstance() {
-        if (instance == null) {
-            instance = new Estatistica();
-        }
-        return instance;
-    }
 
     private Estatistica() {}
     
