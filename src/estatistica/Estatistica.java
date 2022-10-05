@@ -9,7 +9,7 @@ public class Estatistica {
     private AutorizacaoRepository autorizacaoRepository;
     private static Estatistica instance;
 
-    private Estatistica() {}
+    public Estatistica() {}
     
     /* Retorna o numero de medicos */
     public int numeroMedicos() {
