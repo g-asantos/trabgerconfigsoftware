@@ -1,9 +1,7 @@
 package menu;
 import dominio.TipoUsuario;
 import dominio.Usuario;
-import dominio.AutorizacaoExame;
 import repository.UsuarioRepository;
-import repository.AutorizacaoRepository;
 import sessao.Sessao;
 
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.Scanner;
 
 public class MenuAdministrador extends Menu {
     
-    protected AutorizacaoRepository usuarioRepository;
     
     public MenuAdministrador() {
         this.menuAdministrador = this;
@@ -39,13 +36,19 @@ public class MenuAdministrador extends Menu {
     }
 
     public void incluirNovoUsuario() {
-
-        System.out.println("Ver autorizações por nome de usuário");
-        ArrayList<autorizacaoExame> adm =  usuarioRepository.listar();
-        Usuario selecionado = seletorUsuario.selecionar(adm);
-        sessao.setUsuarioLogado(selecionado);
-        if (selecionado.getTipo() == TipoUsuario.ADMIN) menuAdministrador.show();
-        else if (selecionado.getTipo() == TipoUsuario.MEDICO) menuMedico.show();
-        else if (selecionado.getTipo() == TipoUsuario.PACIENTE) menuPaciente.show();
+        
+        TipoUsuario aux;
+        System.out.println("Digite o nome do novo usuário: ");
+        String respostaUm = teclado.nextLine();
+        System.out.println("Digite qual o tipo de usuário: ");
+        String respostaDois = teclado.nextLine();
+        if (respostaDois.equals(TipoUsuario.ADMIN.getNome())){
+            respostaDois = TipoUsuario.ADMIN.getNome();
+        }else if (respostaDois.equals(TipoUsuario.MEDICO.getNome())){
+            respostaDois = TipoUsuario.ADMIN.getNome();
+        }else if (respostaDois.equals(TipoUsuario.PACIENTE.getNome())){
+            respostaDois = TipoUsuario.PACIENTE.getNome();
+        }
+        Usuario usuarios = usuarioRepository.criar(respostaUm, respostaDois);
     }
 }
