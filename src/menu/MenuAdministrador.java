@@ -6,6 +6,7 @@ public class MenuAdministrador extends Menu {
         this.menuAdministrador = this;
     }
 
+    //Inicio opções
     @Override
     protected void showSubMenu() {
         System.out.println("1 - opção qualquer do administrador");
