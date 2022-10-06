@@ -1,5 +1,6 @@
 package menu;
 
+import dominio.AutorizacaoExame;
 import dominio.TipoUsuario;
 import dominio.Usuario;
 import repository.AutorizacaoRepository;
@@ -36,8 +37,8 @@ public class MenuAdministrador extends Menu {
                 this.escolhaMenu(Integer.toString(num));
                 if (num == 1) {
                     this.incluirNovoUsuario();
-                } else {
-                    System.out.println("Opção inexistente. Tente novamente");
+                } else if (num == 2){
+                    this.verAutorizações();
                 }
             } catch (InputMismatchException ex) {
                 System.out.println("Ops...parece que voce digitou um valor invalido.");
@@ -88,5 +89,13 @@ public class MenuAdministrador extends Menu {
             this.teclado.nextLine();
         }       
         }
+    }
+
+
+    public void verAutorizações(){
+        Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listar());
+        List<AutorizacaoExame> listAutorizacao = this.autorizacaoRepository.listarPorPaciente(usuario);
+        System.out.println(listAutorizacao);
+        
     }
 }
