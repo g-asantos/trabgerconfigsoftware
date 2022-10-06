@@ -3,7 +3,6 @@ package menu;
 import dominio.AutorizacaoExame;
 import repository.AutorizacaoRepository;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -40,6 +39,12 @@ public class MenuPaciente extends Menu {
     private void realizarExame() {
         List<AutorizacaoExame> meusExames = this.autorizacaoRepository.listarPorPaciente(this.sessao.getUsuarioLogado())
                 .stream().filter(exame -> exame.getDataRealizacaoExame() == null).collect(Collectors.toList());
+
+        if (meusExames.isEmpty()) {
+            System.out.println("Nenhum exame pendente");
+            return;
+        }
+
         AutorizacaoExame selecionado = this.selecionarAutorizacao(meusExames);
         System.out.println("Informe a data de realização (no formato dd/mm/yyyy): ");
         LocalDate dataRealizacao = this.getDataRealizacao();
@@ -47,7 +52,8 @@ public class MenuPaciente extends Menu {
         if (dataEhValida) {
             selecionado.setDataRealizacaoExame(dataRealizacao);
         } else {
-            System.out.println("Data inválida: a data informada é anterior à da solicitação ou posterior a 30 dias da solicitação ");
+            System.out.println(
+                    "Data inválida: a data informada é anterior à da solicitação ou posterior a 30 dias da solicitação ");
         }
     }
 
@@ -88,8 +94,10 @@ public class MenuPaciente extends Menu {
     }
 
     private void meusExames() {
-        ArrayList<AutorizacaoExame> meusExames = this.autorizacaoRepository.listarPorPaciente(this.sessao.getUsuarioLogado());
-        List<AutorizacaoExame> meusExamesOrdenados = meusExames.stream().sorted(Comparator.comparing(AutorizacaoExame::getDataCadastro)).collect(Collectors.toList());
+        ArrayList<AutorizacaoExame> meusExames = this.autorizacaoRepository
+                .listarPorPaciente(this.sessao.getUsuarioLogado());
+        List<AutorizacaoExame> meusExamesOrdenados = meusExames.stream()
+                .sorted(Comparator.comparing(AutorizacaoExame::getDataCadastro)).collect(Collectors.toList());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         meusExamesOrdenados.forEach(exame -> {
