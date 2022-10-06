@@ -7,9 +7,11 @@ import dominio.TipoUsuario;
 public class Estatistica {
     private UsuarioRepository usuarioRepository;
     private AutorizacaoRepository autorizacaoRepository;
-    private static Estatistica instance;
 
-    public Estatistica() {}
+    public Estatistica() {
+        this.usuarioRepository = UsuarioRepository.getInstance();
+        this.autorizacaoRepository = AutorizacaoRepository.getInstance();
+    }
     
     /* Retorna o numero de medicos */
     public int numeroMedicos() {
