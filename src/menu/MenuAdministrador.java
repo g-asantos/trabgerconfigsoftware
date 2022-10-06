@@ -1,32 +1,48 @@
 package menu;
-import dominio.TipoUsuario;
-import dominio.Usuario;
-import repository.UsuarioRepository;
-import sessao.Sessao;
 
-import java.util.List;
-import java.util.Scanner;
+import dominio.TipoUsuario;
+import repository.AutorizacaoRepository;
+import repository.UsuarioRepository;
+import seletor.SeletorUsuario;
+import seletor.SeletorExame;
+
+import java.util.*;
 
 public class MenuAdministrador extends Menu {
-    
-    
+
+    private AutorizacaoRepository autorizacaoRepository = AutorizacaoRepository.getInstance();
+    private UsuarioRepository usuarioRepository;
+    private TipoUsuario tipoUsuario;
+    private SeletorUsuario seletorUsuario;
+    private SeletorExame seletorExame;
+
     public MenuAdministrador() {
+        this.seletorUsuario = new SeletorUsuario();
+        this.seletorExame = new SeletorExame();
+        this.usuarioRepository = new UsuarioRepository();
+        this.tipoUsuario = new TipoUsuario();
         this.menuAdministrador = this;
-        this.teclado = new Scanner(System.in);
-        this.sessao = Sessao.getInstance();
-        // this.autorizacaoExame = UsuarioRepository.getInstance();
-        // this.seletorUsuario = new SeletorUsuario();
+
     }
 
-    //Inicio opções
+    // Inicio opções
     @Override
     protected void showSubMenu() {
-        System.out.println("1 - Incluir novo usuário");
-        System.out.println("2 - Ver autorizações por nome de usuário");
-        String respostaUsuario = this.teclado.next();
-        if (respostaUsuario.equals("2")) {
-            this.escolhaMenu(respostaUsuario);
-            this.incluirNovoUsuario();
+        while (true) {
+            try {
+                System.out.println("1 - Incluir novo usuário");
+                System.out.println("2 - Ver autorizações por nome de usuário");
+                int num = this.teclado.nextInt();
+                this.escolhaMenu(Integer.toString(num));
+                if (num == 1) {
+                    this.incluirNovoUsuario();
+                } else {
+                    System.out.println("Opção inexistente. Tente novamente");
+                }
+            } catch (InputMismatchException ex) {
+                System.out.println("Ops...parece que voce digitou um valor invalido.");
+                this.teclado.nextLine();
+            }
         }
     }
 
@@ -36,19 +52,36 @@ public class MenuAdministrador extends Menu {
     }
 
     public void incluirNovoUsuario() {
-        
-        TipoUsuario aux;
-        System.out.println("Digite o nome do novo usuário: ");
-        String respostaUm = teclado.nextLine();
-        System.out.println("Digite qual o tipo de usuário: ");
-        String respostaDois = teclado.nextLine();
-        if (respostaDois.equals(TipoUsuario.ADMIN.getNome())){
-            respostaDois = TipoUsuario.ADMIN.getNome();
-        }else if (respostaDois.equals(TipoUsuario.MEDICO.getNome())){
-            respostaDois = TipoUsuario.ADMIN.getNome();
-        }else if (respostaDois.equals(TipoUsuario.PACIENTE.getNome())){
-            respostaDois = TipoUsuario.PACIENTE.getNome();
+        boolean estado = true;
+        while(estado == true){
+            try{
+            System.out.println("Selecione o tipo de Usuário que você deseja criar: ");
+            System.out.println("1 - Administrador ");
+            System.out.println("2 - Médico");
+            System.out.println("3 - Paciente");
+            int tipoUsuNovo = teclado.nextInt();
+            if(tipoUsuNovo == 1){
+                String tipoUsuario = new TipoUsuario();
+                System.out.println(tipoUsuario);
+                System.out.println("Escreva o nome do Usuário que você deseja criar: ");
+                String nomeUsuNovo = teclado.nextLine();
+                UsuarioRepository usuarioRepository = new UsuarioRepository();
+                usuarioRepository.criar(nomeUsuNovo, );
+                System.out.println("");
+                estado = false;
+            } else if(tipoUsuNovo == 2){
+                String tipoUsu = TipoUsuario.MEDICO.getNome();
+                System.out.println(tipoUsu);
+                this.show();
+            } else if(tipoUsuNovo == 3){
+                String tipoUsu = TipoUsuario.PACIENTE.getNome();
+                System.out.println(tipoUsu);
+                this.show();
+            }
+        }catch (InputMismatchException ex) {
+            System.out.println("Ops...parece que voce digitou um valor invalido.");
+            this.teclado.nextLine();
+        }       
         }
-        Usuario usuarios = usuarioRepository.criar(respostaUm, respostaDois);
     }
 }
