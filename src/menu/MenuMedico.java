@@ -25,15 +25,20 @@ public class MenuMedico extends Menu {
 
     @Override
     protected void showSubMenu() {
+        System.out.println("1 - Criar nova autorizacao de exame");
+        System.out.println("2 - Listar autorizacoes");
+        int num = this.teclado.nextInt();
+        this.escolhaMenu(Integer.toString(num));
+    }
+
+    @Override
+    void escolhaMenu(String input) {
+        System.out.println("Menu MEDICO - Usuário escolheu opção " + input);
         while (true) {
             try {
-                System.out.println("1 - Criar nova autorizacao de exame");
-                System.out.println("2 - Listar autorizacoes");
-                int num = this.teclado.nextInt();
-                this.escolhaMenu(Integer.toString(num));
-                if (num == 1) {
+                if (Integer.parseInt(input) == 1) {
                     this.criarAutorizacao();
-                } else if (num == 2) {
+                } else if (Integer.parseInt(input) == 2) {
                     this.listarAutorizacoes();
                 } else {
                     System.out.println("Opção inexistente. Tente novamente");
@@ -45,11 +50,6 @@ public class MenuMedico extends Menu {
         }
     }
 
-    @Override
-    void escolhaMenu(String input) {
-        System.out.println("Menu MEDICO - Usuário escolheu opção " + input);
-    }
-
     private void criarAutorizacao() {
         Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listar());
         Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
@@ -57,6 +57,7 @@ public class MenuMedico extends Menu {
 
         autorizacaoRepository.criar(usuario, exame, medico);
         System.out.println("Autorizacao criada!");
+        this.showSubMenu();
     }
 
     private void listarAutorizacoes() {
