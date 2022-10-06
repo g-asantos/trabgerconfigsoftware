@@ -27,7 +27,8 @@ public class MenuMedico extends Menu {
     @Override
     protected void showSubMenu() {
         System.out.println("1 - Criar nova autorizacao de exame");
-        System.out.println("2 - Listar autorizacoes");
+        System.out.println("2 - Listar autorizacoes por paciente");
+        System.out.println("3 - Lista autorizacoes por tipo de exame");
     }
 
     @Override
@@ -37,7 +38,10 @@ public class MenuMedico extends Menu {
                 this.criarAutorizacao();
                 break;
             case "2":
-                this.listarAutorizacoes();
+                this.listarAutorizacoes("2");
+                break;
+            case "3":
+                this.listarAutorizacoes("3");
                 break;
             default:
                 System.out.println("Opção inexistente. Tente novamente");
@@ -53,31 +57,18 @@ public class MenuMedico extends Menu {
         System.out.println("Autorizacao criada!");
     }
 
-    private void listarAutorizacoes() {
+    private void listarAutorizacoes(String input) {
             try {
-                System.out.println("1 - Listar por paciente");
-                System.out.println("2 - Listar por tipo de exame");
-                int num = this.teclado.nextInt();
-                Comparator<AutorizacaoExame> comparator = Comparator.comparing(AutorizacaoExame::getDataRealizacaoExame);
-                if (num == 1) {
+                int num = Integer.parseInt(input);
+
+                if (num == 2) {
                     Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listarPorTipo(TipoUsuario.PACIENTE));
-                    List<AutorizacaoExame> listaPaciente = this.autorizacaoRepository.listarPorPaciente(usuario).stream().collect(Collectors.toList());
-                    listaPaciente.sort(comparator);
-                    if (listaPaciente.size() < 1) {
-                        System.out.println("Não há autorizações registradas");
-                    } else {
-                        listaPaciente.forEach(list -> System.out.println(list.toString()));
-                    }
-                } else if (num == 2) {
+                    List<AutorizacaoExame> listaPaciente = this.autorizacaoRepository.listarPorPaciente(usuario);
+                    this.printSortedList(listaPaciente);
+                } else if (num == 3) {
                     Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
-                    List<AutorizacaoExame> listaExame = this.autorizacaoRepository.listarPorExame(exame)
-                            .stream().collect(Collectors.toList());
-                    listaExame.sort(comparator);
-                    if (listaExame.size() < 1) {
-                        System.out.println("Não há autorizações registradas");
-                    } else {
-                        listaExame.forEach(list -> System.out.println(list.toString()));
-                    }
+                    List<AutorizacaoExame> listaExame = this.autorizacaoRepository.listarPorExame(exame);
+                    this.printSortedList(listaExame);
                 } else {
                     System.out.println("Opção inexistente. Tente novamente");
                 }
@@ -87,4 +78,13 @@ public class MenuMedico extends Menu {
             }
         }
 
+        private void printSortedList(List<AutorizacaoExame> list){
+            Comparator<AutorizacaoExame> comparator = Comparator.comparing(AutorizacaoExame::getDataCadastro);
+            list.sort(comparator);
+            if (list.size() < 1) {
+                System.out.println("Não há autorizações registradas");
+            } else {
+                list.forEach(l -> System.out.println(l.toString()));
+            }
+        }
 }
