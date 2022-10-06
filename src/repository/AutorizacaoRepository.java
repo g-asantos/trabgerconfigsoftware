@@ -1,7 +1,7 @@
 package repository;
 
 import java.util.ArrayList;
-import java.time.LocalDateTime;  
+import java.time.LocalDate;  
 
 import dominio.AutorizacaoExame;
 import dominio.Exame;
@@ -32,7 +32,7 @@ public class AutorizacaoRepository {
      * de exame.
      */
     public AutorizacaoExame criar(Usuario paciente, Exame exame, Usuario medico){
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDate currentTime = LocalDate.now();
         AutorizacaoExame autExame = new AutorizacaoExame(id++, currentTime, 
                                                          medico, paciente, exame);
         lista.add(autExame);
