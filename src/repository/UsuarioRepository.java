@@ -16,6 +16,9 @@ public class UsuarioRepository {
         return instance;
     }
 
+    private UsuarioRepository() {
+    }
+
     public Usuario criar(String nome, TipoUsuario tipoUsuario) {
         Usuario usuario = new Usuario(UsuarioRepository.id++, nome, tipoUsuario);
         listaUsuarios.add(usuario);
