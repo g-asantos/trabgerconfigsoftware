@@ -1,17 +1,17 @@
 package dominio;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AutorizacaoExame {
     int codigo;
-    LocalDateTime dataCadastro;
+    LocalDate dataCadastro;
     Usuario medicoSolicitante;
     Usuario paciente;
     Exame exame;
     LocalDate dataRealizacaoExame;
 
-    public AutorizacaoExame(int codigo, LocalDateTime dataCadastro, Usuario medicoSolicitante, Usuario paciente, Exame exame) {
+    public AutorizacaoExame(int codigo, LocalDate dataCadastro, Usuario medicoSolicitante, Usuario paciente, Exame exame) {
         this.codigo = codigo;
         this.dataCadastro = dataCadastro;
         this.medicoSolicitante = medicoSolicitante;
@@ -23,7 +23,7 @@ public class AutorizacaoExame {
         return codigo;
     }
 
-    public LocalDateTime getDataCadastro() {
+    public LocalDate getDataCadastro() {
         return dataCadastro;
     }
 
@@ -45,5 +45,13 @@ public class AutorizacaoExame {
 
     public void setDataRealizacaoExame(LocalDate dataRealizacaoExame) {
         this.dataRealizacaoExame = dataRealizacaoExame;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataCadastroFormatada = this.getDataCadastro().format(formatter);
+        String exameMaisMedico = this.getCodigo() + " - " + this.getExame().getNome() + " solicitado por " + this.getMedicoSolicitante().getNome();
+        return exameMaisMedico + " em " + dataCadastroFormatada;
     }
 }

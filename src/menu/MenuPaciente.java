@@ -3,11 +3,11 @@ package menu;
 import dominio.AutorizacaoExame;
 import repository.AutorizacaoRepository;
 
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MenuPaciente extends Menu {
@@ -38,7 +38,53 @@ public class MenuPaciente extends Menu {
     }
 
     private void realizarExame() {
+        List<AutorizacaoExame> meusExames = this.autorizacaoRepository.listarPorPaciente(this.sessao.getUsuarioLogado())
+                .stream().filter(exame -> exame.getDataRealizacaoExame() == null).collect(Collectors.toList());
+        AutorizacaoExame selecionado = this.selecionarAutorizacao(meusExames);
+        System.out.println("Informe a data de realização (no formato dd/mm/yyyy): ");
+        LocalDate dataRealizacao = this.getDataRealizacao();
+        boolean dataEhValida = this.validarData(dataRealizacao, selecionado);
+        if (dataEhValida) {
+            selecionado.setDataRealizacaoExame(dataRealizacao);
+        } else {
+            System.out.println("Data inválida: a data informada é anterior à da solicitação ou posterior a 30 dias da solicitação ");
+        }
+    }
 
+    private boolean validarData(LocalDate dataRealizacao, AutorizacaoExame autorizacao) {
+        if (dataRealizacao.isBefore(autorizacao.getDataCadastro())) {
+            return false;
+        }
+
+        return !autorizacao.getDataCadastro().plusDays(30).isBefore(dataRealizacao);
+    }
+
+    private AutorizacaoExame selecionarAutorizacao(List<AutorizacaoExame> meusExames) {
+        System.out.println("Selecione o exame pelo código: ");
+        AutorizacaoExame selecionado = null;
+
+        while (Objects.isNull(selecionado)) {
+            meusExames.stream().map(AutorizacaoExame::toString).forEach(System.out::println);
+            int codigo = this.teclado.nextInt();
+            selecionado = meusExames.stream().filter(exame -> exame.getCodigo() == codigo).findFirst().orElse(null);
+            if (selecionado == null) {
+                System.out.println("Código inválido, tente novamente");
+            }
+        }
+
+        return selecionado;
+    }
+
+    private LocalDate getDataRealizacao() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        do {
+            try {
+                String data = this.teclado.next();
+                return LocalDate.parse(data, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("Data inválida, tente novamente");
+            }
+        } while (true);
     }
 
     private void meusExames() {
@@ -47,13 +93,12 @@ public class MenuPaciente extends Menu {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         meusExamesOrdenados.forEach(exame -> {
-            String dataCadastroFormatada = exame.getDataCadastro().format(formatter);
             String realizado = "(não realizado)";
             if (exame.getDataRealizacaoExame() != null) {
-                realizado = exame.getDataRealizacaoExame().format(formatter);
+                realizado = "(realizado em " + exame.getDataRealizacaoExame().format(formatter) + ")";
             }
-            String exameMaisMedico = exame.getCodigo() + " - " + exame.getExame().getNome() + " solicitado por " + exame.getMedicoSolicitante().getNome();
-            System.out.println(exameMaisMedico + " em " + dataCadastroFormatada + " " + realizado);
+            System.out.println(exame + " " + realizado);
         });
     }
+
 }
