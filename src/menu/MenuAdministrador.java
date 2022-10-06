@@ -1,6 +1,7 @@
 package menu;
 
 import dominio.TipoUsuario;
+import dominio.Usuario;
 import repository.AutorizacaoRepository;
 import repository.UsuarioRepository;
 import seletor.SeletorUsuario;
@@ -20,7 +21,6 @@ public class MenuAdministrador extends Menu {
         this.seletorUsuario = new SeletorUsuario();
         this.seletorExame = new SeletorExame();
         this.usuarioRepository = new UsuarioRepository();
-        this.tipoUsuario = new TipoUsuario();
         this.menuAdministrador = this;
 
     }
@@ -59,24 +59,29 @@ public class MenuAdministrador extends Menu {
             System.out.println("1 - Administrador ");
             System.out.println("2 - Médico");
             System.out.println("3 - Paciente");
-            int tipoUsuNovo = teclado.nextInt();
+            Scanner scanner = new Scanner(System.in);
+            int tipoUsuNovo = scanner.nextInt();
             if(tipoUsuNovo == 1){
-                String tipoUsuario = new TipoUsuario();
-                System.out.println(tipoUsuario);
+                TipoUsuario tipoUsu = TipoUsuario.ADMIN;
                 System.out.println("Escreva o nome do Usuário que você deseja criar: ");
-                String nomeUsuNovo = teclado.nextLine();
-                UsuarioRepository usuarioRepository = new UsuarioRepository();
-                usuarioRepository.criar(nomeUsuNovo, );
-                System.out.println("");
+                scanner.nextLine();
+                String nomeUsuNovo = scanner.nextLine();
+                this.usuarioRepository.criar(nomeUsuNovo, tipoUsu);
                 estado = false;
             } else if(tipoUsuNovo == 2){
-                String tipoUsu = TipoUsuario.MEDICO.getNome();
-                System.out.println(tipoUsu);
-                this.show();
+                TipoUsuario tipoUsu = TipoUsuario.MEDICO;
+                System.out.println("Escreva o nome do Usuário que você deseja criar: ");
+                scanner.nextLine();
+                String nomeUsuNovo = scanner.nextLine();
+                this.usuarioRepository.criar(nomeUsuNovo, tipoUsu);
+                estado = false;
             } else if(tipoUsuNovo == 3){
-                String tipoUsu = TipoUsuario.PACIENTE.getNome();
-                System.out.println(tipoUsu);
-                this.show();
+                TipoUsuario tipoUsu = TipoUsuario.PACIENTE;
+                System.out.println("Escreva o nome do Usuário que você deseja criar: ");
+                scanner.nextLine();
+                String nomeUsuNovo = teclado.nextLine();
+                this.usuarioRepository.criar(nomeUsuNovo, tipoUsu);
+                estado = false;
             }
         }catch (InputMismatchException ex) {
             System.out.println("Ops...parece que voce digitou um valor invalido.");
