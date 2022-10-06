@@ -39,6 +39,8 @@ public class MenuMedico extends Menu {
             case "2":
                 this.listarAutorizacoes();
                 break;
+            default:
+                System.out.println("Opção inexistente. Tente novamente");
         }
     }
 
@@ -56,37 +58,25 @@ public class MenuMedico extends Menu {
                 System.out.println("1 - Listar por paciente");
                 System.out.println("2 - Listar por tipo de exame");
                 int num = this.teclado.nextInt();
-
+                Comparator<AutorizacaoExame> comparator = Comparator.comparing(AutorizacaoExame::getDataRealizacaoExame);
                 if (num == 1) {
                     Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listarPorTipo(TipoUsuario.PACIENTE));
                     List<AutorizacaoExame> listaPaciente = this.autorizacaoRepository.listarPorPaciente(usuario).stream().collect(Collectors.toList());
-                    List<AutorizacaoExame> listaPacienteOrdenada = listaPaciente.stream().sorted(Comparator.comparing(AutorizacaoExame::getDataRealizacaoExame)).collect(Collectors.toList());
-                    if (listaPacienteOrdenada.size() < 1) {
+                    listaPaciente.sort(comparator);
+                    if (listaPaciente.size() < 1) {
                         System.out.println("Não há autorizações registradas");
                     } else {
-                        listaPacienteOrdenada.forEach(list ->
-                                System.out.println("Código: " + list.getCodigo() + " - Exame: " +
-                                        list.getExame().getNome() + " - Paciente: " +
-                                        list.getPaciente().getNome() + " - Data de Realizacão: " +
-                                        (list.getDataRealizacaoExame() != null ?
-                                                list.getDataRealizacaoExame().toString() : "Exame ainda não realizado")));
+                        listaPaciente.forEach(list -> System.out.println(list.toString()));
                     }
                 } else if (num == 2) {
                     Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
                     List<AutorizacaoExame> listaExame = this.autorizacaoRepository.listarPorExame(exame)
                             .stream().collect(Collectors.toList());
-                    List<AutorizacaoExame> listaExameOrdenada = listaExame.stream()
-                            .sorted(Comparator.comparing(AutorizacaoExame::getDataRealizacaoExame))
-                            .collect(Collectors.toList());
-                    if (listaExameOrdenada.size() < 1) {
+                    listaExame.sort(comparator);
+                    if (listaExame.size() < 1) {
                         System.out.println("Não há autorizações registradas");
                     } else {
-                        listaExameOrdenada.forEach(list ->
-                                System.out.println("Código: " + list.getCodigo() + " - Exame: " +
-                                        list.getExame().getNome() + " - Paciente: " +
-                                        list.getPaciente().getNome() + " - Data de realização: "
-                                        + (list.getDataRealizacaoExame() != null ?
-                                        list.getDataRealizacaoExame().toString() : "Exame ainda não realizado")));
+                        listaExame.forEach(list -> System.out.println(list.toString()));
                     }
                 } else {
                     System.out.println("Opção inexistente. Tente novamente");
