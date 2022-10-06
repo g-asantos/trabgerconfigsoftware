@@ -51,7 +51,7 @@ public class MenuMedico extends Menu {
     }
 
     private void criarAutorizacao() {
-        Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listar());
+        Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listar().stream().filter(u -> u.getTipo() == TipoUsuario.PACIENTE).toList());
         Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
         Usuario medico = this.seletorUsuario.selecionar(this.usuarioRepository.listar().stream().filter(u -> u.getTipo() == TipoUsuario.MEDICO).toList());
 
@@ -70,7 +70,7 @@ public class MenuMedico extends Menu {
                 int num = this.teclado.nextInt();
 
                 if (num == 1) {
-                    Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listar());
+                    Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listar().stream().filter(u -> u.getTipo() == TipoUsuario.PACIENTE).toList());
                     List<AutorizacaoExame> listaPaciente = this.autorizacaoRepository.listarPorPaciente(usuario).stream().toList();
                     List<AutorizacaoExame> listaPacienteOrdenada = listaPaciente.stream().sorted(Comparator.comparing(AutorizacaoExame::getDataRealizacaoExame)).toList();
                     if (listaPacienteOrdenada.size() < 1) {
