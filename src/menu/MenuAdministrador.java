@@ -3,6 +3,7 @@ package menu;
 import dominio.AutorizacaoExame;
 import dominio.TipoUsuario;
 import dominio.Usuario;
+import estatistica.Estatistica;
 import repository.AutorizacaoRepository;
 
 import java.util.Collections;
@@ -33,6 +34,7 @@ public class MenuAdministrador extends Menu {
                 this.verAutorizacoes();
                 break;
             case "3":
+                this.verEstatistica();
                 break;
             default:
                 System.out.println("Opção inválida, tente novamente");
@@ -67,6 +69,7 @@ public class MenuAdministrador extends Menu {
 
 
     private void verAutorizacoes() {
+        this.teclado.nextLine();
         System.out.println("Digite o nome do usuário que está buscando: ");
         String nome = this.teclado.nextLine();
         List<Usuario> usuarios = this.usuarioRepository.listarMedicoOuPacientePorNome(nome);
@@ -89,5 +92,13 @@ public class MenuAdministrador extends Menu {
         }
 
         autorizacoes.stream().map(AutorizacaoExame::toString).forEach(System.out::println);
+    }
+
+    private void verEstatistica() {
+        Estatistica estatistica = new Estatistica();
+        System.out.println("Número de médicos: " + estatistica.numeroMedicos());
+        System.out.println("Número de pacientes: " + estatistica.numeroPacientes());
+        System.out.println("Número de autorizações emitidas: " + estatistica.numeroAutorizacoes());
+        System.out.println("Percentual de autorizações com exames já realizados: " + estatistica.percentualRealizados() + "%");
     }
 }
