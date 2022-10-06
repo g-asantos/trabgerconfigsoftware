@@ -10,7 +10,6 @@ import seletor.SeletorExame;
 import seletor.SeletorUsuario;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MenuMedico extends Menu {
     private ExameRepository exameRepository = ExameRepository.getInstance();
