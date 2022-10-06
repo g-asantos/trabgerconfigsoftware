@@ -5,6 +5,7 @@ import dominio.TipoUsuario;
 import dominio.Usuario;
 import repository.AutorizacaoRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MenuAdministrador extends Menu {
@@ -29,7 +30,7 @@ public class MenuAdministrador extends Menu {
                 this.incluirNovoUsuario();
                 break;
             case "2":
-                this.verAutorizações();
+                this.verAutorizacoes();
                 break;
             case "3":
                 break;
@@ -65,10 +66,28 @@ public class MenuAdministrador extends Menu {
     }
 
 
-    private void verAutorizações() {
-        Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listar());
-        List<AutorizacaoExame> listAutorizacao = this.autorizacaoRepository.listarPorPaciente(usuario);
-        System.out.println(listAutorizacao);
+    private void verAutorizacoes() {
+        System.out.println("Digite o nome do usuário que está buscando: ");
+        String nome = this.teclado.nextLine();
+        List<Usuario> usuarios = this.usuarioRepository.listarMedicoOuPacientePorNome(nome);
 
+        if (usuarios.isEmpty()) {
+            System.out.println("Usuário não encontrado");
+            return;
+        }
+
+        Usuario usuario = this.seletorUsuario.selecionar(usuarios);
+        List<AutorizacaoExame> autorizacoes = Collections.emptyList();
+        if (usuario.getTipo().equals(TipoUsuario.PACIENTE))
+            autorizacoes = this.autorizacaoRepository.listarPorPaciente(usuario);
+        if (usuario.getTipo().equals(TipoUsuario.MEDICO))
+            autorizacoes = this.autorizacaoRepository.listarPorMedico(usuario);
+
+        if (autorizacoes.isEmpty()) {
+            System.out.println("Nenhuma autorização de exame para esse usuário");
+            return;
+        }
+
+        autorizacoes.stream().map(AutorizacaoExame::toString).forEach(System.out::println);
     }
 }
