@@ -3,7 +3,6 @@ package repository;
 import dominio.Usuario;
 import dominio.TipoUsuario;
 import java.util.ArrayList;
-import java.util.List;
 
 public class UsuarioRepository {
     private static UsuarioRepository instance;
@@ -16,6 +15,8 @@ public class UsuarioRepository {
         return instance;
     }
 
+    private UsuarioRepository() {
+    }
     public Usuario criar(String nome, TipoUsuario tipoUsuario) {
         Usuario usuario = new Usuario(UsuarioRepository.id++, nome, tipoUsuario);
         listaUsuarios.add(usuario);
