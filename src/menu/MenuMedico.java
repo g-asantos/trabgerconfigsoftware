@@ -50,9 +50,8 @@ public class MenuMedico extends Menu {
     private void criarAutorizacao() {
         Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listarPorTipo(TipoUsuario.PACIENTE));
         Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
-        Usuario medico = this.seletorUsuario.selecionar(this.usuarioRepository.listarPorTipo(TipoUsuario.MEDICO));
 
-        autorizacaoRepository.criar(usuario, exame, medico);
+        autorizacaoRepository.criar(usuario, exame, this.sessao.getUsuarioLogado());
         System.out.println("Autorizacao criada!");
     }
 
