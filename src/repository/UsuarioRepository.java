@@ -3,7 +3,6 @@ package repository;
 import dominio.Usuario;
 import dominio.TipoUsuario;
 import java.util.ArrayList;
-import java.util.List;
 
 public class UsuarioRepository {
     private static UsuarioRepository instance;
@@ -18,7 +17,6 @@ public class UsuarioRepository {
 
     private UsuarioRepository() {
     }
-
     public Usuario criar(String nome, TipoUsuario tipoUsuario) {
         Usuario usuario = new Usuario(UsuarioRepository.id++, nome, tipoUsuario);
         listaUsuarios.add(usuario);
@@ -45,7 +43,7 @@ public class UsuarioRepository {
         ArrayList<Usuario > listaNome = new ArrayList<>();
 
         for (Usuario usuario : listaUsuarios) {
-            if (usuario.getNome().contains(nome) && usuario.getTipo() == TipoUsuario.PACIENTE || usuario.getTipo() == TipoUsuario.MEDICO) {
+            if (usuario.getNome().contains(nome) && (usuario.getTipo() == TipoUsuario.PACIENTE || usuario.getTipo() == TipoUsuario.MEDICO)) {
                 listaNome.add(usuario);
             }
         }
