@@ -30,9 +30,9 @@ public class Estatistica {
 
     /* Retorna o percentual de realizados */
     public int percentualRealizados() {
-        int totalAutorizados = autorizacaoRepository.listar().size();
-        int totalRealizados = autorizacaoRepository.listarRealizados().size();
+        double totalAutorizados = autorizacaoRepository.listar().size();
+        double totalRealizados = autorizacaoRepository.listarRealizados().size();
         if (totalRealizados == 0) return 0;
-        return (totalRealizados / totalAutorizados) * 100;
+        return (int) ((totalRealizados / totalAutorizados) * 100);
     }
 }
