@@ -28,6 +28,7 @@ public class MenuMedico extends Menu {
         System.out.println("1 - Criar nova autorizacao de exame");
         System.out.println("2 - Listar autorizacoes por paciente");
         System.out.println("3 - Lista autorizacoes por tipo de exame");
+        System.out.println("4 - Lista autorizacoes solicitadas por mim");
     }
 
     @Override
@@ -41,6 +42,9 @@ public class MenuMedico extends Menu {
                 break;
             case "3":
                 this.listarAutorizacoes("3");
+                break;
+            case "4":
+                this.minhasAutorizacoes();
                 break;
             default:
                 System.out.println("Opção inexistente. Tente novamente");
@@ -56,33 +60,39 @@ public class MenuMedico extends Menu {
     }
 
     private void listarAutorizacoes(String input) {
-            try {
-                int num = Integer.parseInt(input);
+        try {
+            int num = Integer.parseInt(input);
 
-                if (num == 2) {
-                    Usuario usuario = this.seletorUsuario.selecionar(this.usuarioRepository.listarPorTipo(TipoUsuario.PACIENTE));
-                    List<AutorizacaoExame> listaPaciente = this.autorizacaoRepository.listarPorPaciente(usuario);
-                    this.printSortedList(listaPaciente);
-                } else if (num == 3) {
-                    Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
-                    List<AutorizacaoExame> listaExame = this.autorizacaoRepository.listarPorExame(exame);
-                    this.printSortedList(listaExame);
-                } else {
-                    System.out.println("Opção inexistente. Tente novamente");
-                }
-            } catch (InputMismatchException ex) {
-                System.out.println("Ops...parece que voce digitou um valor invalido.");
-                this.teclado.nextLine();
-            }
-        }
-
-        private void printSortedList(List<AutorizacaoExame> list){
-            Comparator<AutorizacaoExame> comparator = Comparator.comparing(AutorizacaoExame::getDataCadastro);
-            list.sort(comparator);
-            if (list.size() < 1) {
-                System.out.println("Não há autorizações registradas");
+            if (num == 2) {
+                Usuario usuario = this.seletorUsuario
+                        .selecionar(this.usuarioRepository.listarPorTipo(TipoUsuario.PACIENTE));
+                List<AutorizacaoExame> listaPaciente = this.autorizacaoRepository.listarPorPaciente(usuario);
+                this.printSortedList(listaPaciente);
+            } else if (num == 3) {
+                Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
+                List<AutorizacaoExame> listaExame = this.autorizacaoRepository.listarPorExame(exame);
+                this.printSortedList(listaExame);
             } else {
-                list.forEach(l -> System.out.println(l.toString()));
+                System.out.println("Opção inexistente. Tente novamente");
             }
+        } catch (InputMismatchException ex) {
+            System.out.println("Ops...parece que voce digitou um valor invalido.");
+            this.teclado.nextLine();
         }
+    }
+
+    private void minhasAutorizacoes() {
+        ArrayList<AutorizacaoExame> minhas = this.autorizacaoRepository.listarPorMedico(this.sessao.getUsuarioLogado());
+        minhas.stream().map(AutorizacaoExame::toString).forEach(System.out::println);
+    }
+
+    private void printSortedList(List<AutorizacaoExame> list) {
+        Comparator<AutorizacaoExame> comparator = Comparator.comparing(AutorizacaoExame::getDataCadastro);
+        list.sort(comparator);
+        if (list.size() < 1) {
+            System.out.println("Não há autorizações registradas");
+        } else {
+            list.forEach(l -> System.out.println(l.toString()));
+        }
+    }
 }
