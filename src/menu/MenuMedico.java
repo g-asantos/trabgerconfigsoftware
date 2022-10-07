@@ -38,10 +38,10 @@ public class MenuMedico extends Menu {
                 this.criarAutorizacao();
                 break;
             case "2":
-                this.listarAutorizacoes("2");
+                this.listarAutorizacoesPorPaciente();
                 break;
             case "3":
-                this.listarAutorizacoes("3");
+                this.listarAutorizacoesPorExame();
                 break;
             case "4":
                 this.minhasAutorizacoes();
@@ -59,31 +59,22 @@ public class MenuMedico extends Menu {
         System.out.println("Autorizacao criada!");
     }
 
-    private void listarAutorizacoes(String input) {
-        try {
-            int num = Integer.parseInt(input);
+    private void listarAutorizacoesPorPaciente() {
+        Usuario usuario = this.seletorUsuario
+                .selecionar(this.usuarioRepository.listarPorTipo(TipoUsuario.PACIENTE));
+        List<AutorizacaoExame> listaPaciente = this.autorizacaoRepository.listarPorPaciente(usuario);
+        this.printSortedList(listaPaciente);
+    }
 
-            if (num == 2) {
-                Usuario usuario = this.seletorUsuario
-                        .selecionar(this.usuarioRepository.listarPorTipo(TipoUsuario.PACIENTE));
-                List<AutorizacaoExame> listaPaciente = this.autorizacaoRepository.listarPorPaciente(usuario);
-                this.printSortedList(listaPaciente);
-            } else if (num == 3) {
-                Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
-                List<AutorizacaoExame> listaExame = this.autorizacaoRepository.listarPorExame(exame);
-                this.printSortedList(listaExame);
-            } else {
-                System.out.println("Opção inexistente. Tente novamente");
-            }
-        } catch (InputMismatchException ex) {
-            System.out.println("Ops...parece que voce digitou um valor invalido.");
-            this.teclado.nextLine();
-        }
+    private void listarAutorizacoesPorExame() {
+        Exame exame = this.seletorExame.selecionar(this.exameRepository.listar());
+        List<AutorizacaoExame> listaExame = this.autorizacaoRepository.listarPorExame(exame);
+        this.printSortedList(listaExame);
     }
 
     private void minhasAutorizacoes() {
         ArrayList<AutorizacaoExame> minhas = this.autorizacaoRepository.listarPorMedico(this.sessao.getUsuarioLogado());
-        minhas.stream().map(AutorizacaoExame::toString).forEach(System.out::println);
+        this.printSortedList(minhas);
     }
 
     private void printSortedList(List<AutorizacaoExame> list) {
