@@ -71,8 +71,9 @@ public class MenuPaciente extends Menu {
 
         while (Objects.isNull(selecionado)) {
             meusExames.stream().map(AutorizacaoExame::toString).forEach(System.out::println);
-            int codigo = this.teclado.nextInt();
-            selecionado = meusExames.stream().filter(exame -> exame.getCodigo() == codigo).findFirst().orElse(null);
+            String codigo = this.teclado.next();
+            selecionado = meusExames.stream().filter(exame -> String.valueOf(exame.getCodigo()).equals(codigo))
+                    .findFirst().orElse(null);
             if (selecionado == null) {
                 System.out.println("Código inválido, tente novamente");
             }
