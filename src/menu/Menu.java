@@ -44,7 +44,7 @@ public abstract class Menu {
         System.out.println("---");
         System.out.println("0 - trocar usuário");
         this.showSubMenu();
-        System.out.println("99 - sair");
+        System.out.println("99 - encerrar programa");
         String respostaUsuario = this.teclado.next();
         if (respostaUsuario.equals("0")) {
             this.trocarUsuario();
